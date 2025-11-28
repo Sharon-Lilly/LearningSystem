@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>AI Learning Dashboard</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f3f4f6;
+    }
+    header {
+      background: #1f2937;
+      color: white;
+      padding: 12px 16px;
+    }
+    .container {
+      display: grid;
+      grid-template-columns: 2fr 1.5fr;
+      gap: 16px;
+      padding: 16px;
+    }
+    @media (max-width: 900px) {
+      .container { grid-template-columns: 1fr; }
+    }
+    .card {
+      background: white;
+      padding: 12px 14px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    h3 { margin-top: 0; }
+    .chat-box {
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      height: 260px;
+      padding: 8px;
+      overflow-y: auto;
+      background: #f9fafb;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+    .chat-input-row {
+      display: flex;
+      gap: 6px;
+    }
+    .chat-input-row input {
+      flex: 1;
+      padding: 8px;
+      border-radius: 999px;
+      border: 1px solid #d1d5db;
+    }
+    .chat-input-row button {
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: none;
+      background: #4a6cf7;
+      color: #fff;
+      cursor: pointer;
+    }
+    li { font-size: 14px; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h2>AI-Based Personalized Learning System – Dashboard</h2>
+</header>
+
+<div class="container">
+  <!-- LEFT SIDE -->
+  <div>
+    <div class="card">
+      <h3>Upload Resume (UI only)</h3>
+      <p>Select your resume file (feature to be connected to backend later).</p>
+      <input type="file" />
+    </div>
+
+    <div class="card" style="margin-top: 12px;">
+      <h3>Personalized Learning Plan (Demo)</h3>
+      <ul id="planList">
+        <li>Week 1–2: Learn Data Structures basics</li>
+        <li>Week 3–4: Practice DBMS & SQL</li>
+        <li>Week 5–6: Build a mini project</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- RIGHT SIDE - CHATBOT -->
+  <div class="card">
+    <h3>Chatbot – Learning Assistant</h3>
+    <div id="chatBox" class="chat-box">
+      <div><strong>Bot:</strong> Hi 👋 I am your learning assistant. Tell me your skills or ask “What should I learn next?”.</div>
+    </div>
+    <div class="chat-input-row">
+      <input id="chatInput" type="text" placeholder="Type your message..." />
+      <button id="chatSend">Send</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const chatBox = document.getElementById("chatBox");
+  const chatInput = document.getElementById("chatInput");
+  const chatSend = document.getElementById("chatSend");
+
+  function addMessage(text, from) {
+    const div = document.createElement("div");
+    div.innerHTML = `<strong>${from}:</strong> ${text}`;
+    chatBox.appendChild(div);
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
+
+  function simpleReply(message) {
+    const msg = message.toLowerCase();
+    if (msg.includes("hi") || msg.includes("hello")) {
+      return "Hello! 😊 Tell me what skills you already know.";
+    }
+    if (msg.includes("python")) {
+      return "Great! Since you know Python, focus on Data Structures and Algorithms next.";
+    }
+    if (msg.includes("resume")) {
+      return "Later I will read your resume and find your skill gaps. For now, you can type your skills.";
+    }
+    if (msg.includes("what should i learn") || msg.includes("learn next")) {
+      return "Start with DSA, DBMS and at least one mini project for your resume.";
+    }
+    return "I am a demo frontend chatbot. In the full project I will be connected to an AI backend.";
+  }
+
+  chatSend.onclick = () => {
+    const text = chatInput.value.trim();
+    if (!text) return;
+    addMessage(text, "You");
+    chatInput.value = "";
+    const reply = simpleReply(text);
+    setTimeout(() => addMessage(reply, "Bot"), 300);
+  };
+
+  chatInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") chatSend.click();
+  });
+</script>
+
+</body>
+</html>
