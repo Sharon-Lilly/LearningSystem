@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>AI-Based Personalized Learning System</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      background: #020617;
+      color: #e5e7eb;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* NAVBAR */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(12px);
+      background: rgba(2, 6, 23, 0.85);
+      border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+    }
+
+    .nav-container {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      font-size: 18px;
+    }
+
+    .logo-badge {
+      width: 28px;
+      height: 28px;
+      border-radius: 10px;
+      background: radial-gradient(circle at 20% 10%, #38bdf8, #4f46e5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 18px;
+      font-size: 14px;
+      color: #9ca3af;
+    }
+
+    .nav-links a:hover {
+      color: #e5e7eb;
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .btn {
+      border-radius: 999px;
+      padding: 7px 16px;
+      font-size: 13px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      background: transparent;
+      color: #e5e7eb;
+    }
+
+    .btn-outline {
+      border-color: #4b5563;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #4f46e5, #22c55e);
+      border: none;
+    }
+
+    .btn-primary:hover {
+      opacity: 0.95;
+    }
+
+    /* HERO SECTION */
+    .hero {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 40px 16px 60px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+      gap: 32px;
+      align-items: center;
+    }
+
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+      .nav-links {
+        display: none;
+      }
+      .nav-actions {
+        display: none;
+      }
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      color: #a5b4fc;
+      margin-bottom: 12px;
+    }
+
+    .eyebrow-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #22c55e;
+    }
+
+    .hero-title {
+      font-size: clamp(28px, 4vw, 36px);
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 12px;
+    }
+
+    .hero-gradient {
+      background: linear-gradient(135deg, #a5b4fc, #22c55e);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .hero-subtitle {
+      font-size: 14px;
+      color: #9ca3af;
+      max-width: 420px;
+      margin-bottom: 18px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 900px) {
+      .hero-actions {
+        justify-content: center;
+      }
+      .hero-subtitle {
+        max-width: none;
+        margin-left: auto;
+        margin-right: auto;
+      }
+    }
+
+    .hero-meta {
+      font-size: 11px;
+      color: #6b7280;
+    }
+
+    /* Hero right card */
+    .hero-card {
+      border-radius: 20px;
+      padding: 16px 18px;
+      background: radial-gradient(circle at 0 0, rgba(56, 189, 248, 0.2), transparent),
+                  radial-gradient(circle at 110% 0, rgba(59, 130, 246, 0.2), transparent),
+                  #020617;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      box-shadow: 0 20px 60px rgba(15, 23, 42, 0.8);
+    }
+
+    .hero-card-title {
+      font-size: 13px;
+      color: #e5e7eb;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .hero-chip {
+      font-size: 10px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(148, 163, 184, 0.6);
+    }
+
+    .hero-card-box {
+      background: rgba(15, 23, 42, 0.9);
+      border-radius: 14px;
+      padding: 10px 12px;
+      margin-bottom: 10px;
+      font-size: 12px;
+      color: #cbd5f5;
+      border: 1px solid rgba(55, 65, 81, 0.9);
+    }
+
+    .hero-card-label {
+      font-size: 10px;
+      color: #9ca3af;
+      margin-bottom: 4px;
+    }
+
+    .hero-stat-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: #9ca3af;
+      margin-top: 10px;
+    }
+
+    /* FEATURES SECTION */
+    .section {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 10px 16px 40px;
+    }
+
+    .section-title {
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+
+    .section-subtitle {
+      font-size: 13px;
+      color: #9ca3af;
+      margin-bottom: 18px;
+      max-width: 520px;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    @media (max-width: 900px) {
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .feature-card {
+      background: rgba(15, 23, 42, 0.9);
+      border-radius: 14px;
+      padding: 14px 12px;
+      border: 1px solid rgba(51, 65, 85, 0.9);
+      font-size: 13px;
+    }
+
+    .feature-tag {
+      font-size: 10px;
+      color: #a5b4fc;
+      margin-bottom: 4px;
+    }
+
+    .feature-title {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .feature-text {
+      font-size: 12px;
+      color: #9ca3af;
+    }
+
+    /* HOW IT WORKS */
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      font-size: 13px;
+    }
+
+    @media (max-width: 900px) {
+      .steps-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .step-card {
+      background: rgba(15, 23, 42, 0.9);
+      border-radius: 14px;
+      padding: 14px 12px;
+      border: 1px solid rgba(51, 65, 85, 0.9);
+    }
+
+    .step-number {
+      font-size: 11px;
+      color: #a5b4fc;
+      margin-bottom: 4px;
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid rgba(30, 64, 175, 0.6);
+      background: #020617;
+      font-size: 11px;
+      color: #6b7280;
+    }
+
+    .footer-inner {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 10px 16px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="nav-container">
+    <div class="logo">
+      <div class="logo-badge">AI</div>
+      <span>Learning System</span>
+    </div>
+
+    <nav class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#how">How it works</a>
+      <a href="#why">Why us</a>
+    </nav>
+
+    <div class="nav-actions">
+      <!-- Change href to your real login page -->
+      <a href="login.html"><button class="btn btn-outline">Login</button></a>
+      <a href="login.html"><button class="btn btn-primary">Get Started</button></a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- HERO -->
+  <section class="hero">
+    <div>
+      <div class="eyebrow">
+        <span class="eyebrow-dot"></span>
+        AI-based personalized learning • Resume driven
+      </div>
+      <h1 class="hero-title">
+        Turn your <span class="hero-gradient">resume</span> into a
+        personalized learning path.
+      </h1>
+      <p class="hero-subtitle">
+        Upload your resume, detect skill gaps automatically and get a smart
+        learning roadmap that adapts to how fast you learn.
+      </p>
+      <div class="hero-actions">
+        <a href="login.html">
+          <button class="btn btn-primary">Start for students</button>
+        </a>
+        <a href="#features">
+          <button class="btn btn-outline">See how it works</button>
+        </a>
+      </div>
+      <p class="hero-meta">
+        Built for students & freshers preparing for software jobs, internships and higher studies.
+      </p>
+    </div>
+
+    <div class="hero-card">
+      <div class="hero-card-title">
+        <span>Sample Learning Snapshot</span>
+        <span class="hero-chip">Live preview</span>
+      </div>
+
+      <div class="hero-card-box">
+        <div class="hero-card-label">Detected skills</div>
+        <div>Python · C · HTML · Basic SQL</div>
+      </div>
+
+      <div class="hero-card-box">
+        <div class="hero-card-label">Skill gaps</div>
+        <div>Data Structures & Algorithms · DBMS · Git · Mini projects</div>
+      </div>
+
+      <div class="hero-card-box">
+        <div class="hero-card-label">Next 6-week plan</div>
+        <div>
+          Week 1–2: DSA basics<br />
+          Week 3–4: DBMS + SQL practice<br />
+          Week 5–6: Build 1 guided project
+        </div>
+      </div>
+
+      <div class="hero-stat-row">
+        <span>Adaptive pace: <strong>Normal</strong></span>
+        <span>Confidence: <strong>72%</strong></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section id="features" class="section">
+    <h2 class="section-title">Key features</h2>
+    <p class="section-subtitle">
+      Everything you need to understand where you stand today and what to learn next – without guessing.
+    </p>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-tag">01 · Resume understanding</div>
+        <div class="feature-title">AI-powered resume analysis</div>
+        <p class="feature-text">
+          The system reads your resume, extracts your current skills,
+          tools and education automatically.
+        </p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-tag">02 · Skill gaps</div>
+        <div class="feature-title">Find missing skills instantly</div>
+        <p class="feature-text">
+          Compares your skills with target roles (e.g., Software Engineer,
+          Data Analyst) and highlights gaps clearly.
+        </p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-tag">03 · Personalized plan</div>
+        <div class="feature-title">Adaptive learning roadmap</div>
+        <p class="feature-text">
+          Generates a weekly learning plan that adjusts to your pace:
+          slow, normal or fast track.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section id="how" class="section">
+    <h2 class="section-title">How it works</h2>
+    <p class="section-subtitle">
+      Simple 3-step flow for students, freshers and working professionals.
+    </p>
+
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-number">Step 1</div>
+        <div class="feature-title">Create your account</div>
+        <p class="feature-text">
+          Sign up using email or your institute login and share basic
+          details about your goals.
+        </p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">Step 2</div>
+        <div class="feature-title">Upload resume or skills</div>
+        <p class="feature-text">
+          Upload your PDF resume or enter your skills manually. The AI
+          identifies strengths and missing areas.
+        </p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">Step 3</div>
+        <div class="feature-title">Follow your learning path</div>
+        <p class="feature-text">
+          Receive a personalized roadmap, track progress and chat with
+          the learning assistant whenever you’re stuck.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY US -->
+  <section id="why" class="section">
+    <h2 class="section-title">Why choose this system?</h2>
+    <p class="section-subtitle">
+      Designed as an academic mini-project but inspired by real
+      industry learning platforms.
+    </p>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-title">Made for students</div>
+        <p class="feature-text">
+          Focused on CS/IT learners: includes core subjects like DSA, DBMS,
+          OOP, OS and projects.
+        </p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-title">Easy to extend</div>
+        <p class="feature-text">
+          Frontend + backend architecture can be connected to any ML model,
+          database or chatbot API later.
+        </p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-title">Perfect for demo & viva</div>
+        <p class="feature-text">
+          Clear flow, neat UI and explainable modules: login, resume parser,
+          skill gaps, learning plan and chatbot.
+        </p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <span>© 2025 AI-Based Personalized Learning System</span>
+    <span>Built as an academic project by our team.</span>
+  </div>
+</footer>
+
+</body>
+</html>
